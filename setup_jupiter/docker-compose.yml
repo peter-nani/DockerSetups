@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  jupyter:
+    image: jupyter/tensorflow-notebook:latest
+    container_name: jupyter-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/hr306/work
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"  # Enables JupyterLab by default
+    command: start-notebook.sh
+

@@ -1,0 +1,41 @@
+version: '2.3'
+
+volumes:
+  data-psql:
+  data-horizon:
+  data-grafana:
+
+services:
+  postgres:
+    image: postgres:10
+    env_file:
+      - .postgres.env
+    volumes:
+      - data-psql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+
+  horizon:
+    image: opennms/horizon:latest
+    env_file:
+      - .opennms.env
+      - .postgres.env
+    volumes:
+      - data-horizon:/opennms-data
+      - ./horizon-22.0.4-etc:/opt/opennms/etc
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8980:8980"
+
+  grafana:
+    image: opennms/helm:latest
+    env_file:
+      - .grafana.env
+    volumes:
+      - data-grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+
