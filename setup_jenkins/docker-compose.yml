@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8090:8090"
+      - "50001:50001"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /home/hr306/jenkins_setup/jenkins_data_backup:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+volumes:
+  jenkins_home:
+
