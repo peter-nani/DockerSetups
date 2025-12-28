@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: always
+
+    # Run as domain user hr306
+    user: "635403260:635400513"
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./filebrowser/data:/data
+      - ./filebrowser/config:/config   # 🔥 THIS IS REQUIRED
+      - /home/hr306:/srv
+
+    command:
+      - "--address=0.0.0.0"
+      - "--port=8080"
+      - "--root=/srv"
+      - "--database=/data/database.db"
+
